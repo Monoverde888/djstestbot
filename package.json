@@ -1,0 +1,19 @@
+{
+  "name": "testdjs13",
+  "version": "0.1.0",
+  "description": "mong",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Monoverde",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.3.0"
+  },
+  "dependencies": {
+    "discord.js": "^13.3.1",
+    "dotenv": "^10.0.0"
+  }
+}
