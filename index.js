@@ -23,6 +23,7 @@ client.on('interactionCreate', async interaction => {
 	} else if (commandName === 'user') {
 		await interaction.reply(`Tu Tag: ${interaction.user.tag}\nTu ID: ${interaction.user.id}`);
 	} else if (commandName === "robarbanner") {
+        interaction.user.fetch(true)
         await interaction.reply(`${interaction.user.bannerURL}`)
     }
 });
