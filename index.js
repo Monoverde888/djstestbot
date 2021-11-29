@@ -3,12 +3,16 @@ dotenv.config();
 const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
 
-// Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 client.commands = new Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-// When the client is ready, run this code (only once)
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.data.name, command);
+}
+
 client.once('ready', () => {
 	console.log('Ready!');
 });
@@ -16,17 +20,16 @@ client.once('ready', () => {
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
-	const { commandName } = interaction;
+	const command = client.commands.get(interaction.commandName);
 
-      if (commandName === 'server') {
-       
-	} else if (commandName === 'user') {
-		await interaction.reply(`Tu Tag: ${interaction.user.tag}\nTu ID: ${interaction.user.id}`);
-	} else if (commandName === "robarbanner") {
-        interaction.user.fetch(true)
-        await interaction.reply(`${interaction.user.bannerURL}`)
-    }
+	if (!command) return;
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		return interaction.reply({ content: 'Ocurrio un error ejecutando este comando', ephemeral: true });
+	}
 });
 
-// Login to Discord with your client's token
 client.login(process.env.token);
